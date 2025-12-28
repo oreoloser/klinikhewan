@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klinik Hewan Sumbul</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }
+        header { background-color: #6a1b9a; color: white; padding: 20px; text-align: center; }
+        nav { background-color: #6a1b9a; padding: 10px; }
+        nav ul { list-style: none; padding: 0; display: flex; justify-content: center; }
+        nav ul li { margin: 0 10px; }
+        nav ul li a { color: white; text-decoration: none; padding: 10px 20px; background-color: #ab47bc; border-radius: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .section { margin: 20px 0; }
+        .cards { display: flex; justify-content: space-around; }
+        .card { background-color: #6a1b9a; color: white; padding: 20px; border-radius: 10px; width: 30%; text-align: center; }
+        .contact { background-color: #6a1b9a; color: white; padding: 20px; }
+        form { max-width: 400px; margin: 0 auto; }
+        input, button { display: block; width: 100%; margin: 10px 0; padding: 10px; }
+        .flash { color: red; text-align: center; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 8px; }
+        th { background-color: #6a1b9a; color: white; }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('home') }}">Home</a></li>
+            <li><a href="{{ url_for('data_hewan') }}">Data Hewan</a></li>
+            <li><a href="{{ url_for('data_user') }}">Data User</a></li>
+            <li><a href="{{ url_for('fasilitas') }}">Fasilitas</a></li>
+            <li><a href="{{ url_for('alur_layanan') }}">Alur Layanan</a></li>
+            {% if current_user.is_authenticated %}
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            {% else %}
+                <li><a href="{{ url_for('login') }}">Log in</a></li>
+                <li><a href="{{ url_for('signup') }}">Sign up</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash">{{ messages[0] }}</div>
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

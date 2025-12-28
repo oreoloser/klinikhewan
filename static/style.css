@@ -1,0 +1,54 @@
+/* header { */
+    /* Langsung panggil nama filenya jika berada di folder yang sama */
+    /* background-image: url('kucing.png'); 
+    background-size: cover;
+    background-position: center;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+} */
+/* Container utama untuk kartu *//* Container kartu */
+.cards {
+    display: flex;
+    justify-content: center;
+    gap: 15px; /* Jarak antar kartu dipersempit */
+    padding: 20px;
+    flex-wrap: wrap;
+}
+
+/* Kartu ukuran mini */
+.card {
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    width: 120px; /* Lebar kartu jauh lebih kecil */
+    padding: 15px 10px;
+    text-align: center;
+    transition: all 0.2s ease-in-out;
+}
+
+.card:hover {
+    background: #ffffff;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    transform: scale(1.05); /* Efek membesar sedikit saat disentuh */
+}
+
+/* Gambar ukuran kecil */
+.card img {
+    width: 50px;  /* Gambar sangat compact */
+    height: 50px;
+    object-fit: contain;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+/* Teks judul kecil */
+.card h3 {
+    font-size: 0.85rem; /* Font lebih kecil dan manis */
+    color: #444;
+    margin: 0;
+    line-height: 1.2;
+    font-weight: 600;
+}

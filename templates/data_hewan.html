@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Data Hewan</h2>
+<table>
+    <tr><th>ID</th><th>Nama</th><th>Jenis</th><th>Umur</th><th>Pemilik</th><th>Aksi</th></tr>
+    {% for pet in pets %}
+    <tr>
+        <td>{{ pet.id }}</td>
+        <td>{{ pet.name }}</td>
+        <td>{{ pet.species }}</td>
+        <td>{{ pet.age }}</td>
+        <td>{{ pet.owner.username }}</td>
+        <td>
+            <form method="POST" style="display:inline;">
+                <input type="hidden" name="pet_id" value="{{ pet.id }}">
+                <input name="name" value="{{ pet.name }}" required>
+                <input name="species" value="{{ pet.species }}" required>
+                <input name="age" value="{{ pet.age }}" required>
+                <button name="update">Update</button>
+            </form>
+            <form method="POST" style="display:inline;">
+                <input type="hidden" name="pet_id" value="{{ pet.id }}">
+                <button name="delete">Delete</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<h3>Tambah Hewan</h3>
+<form method="POST">
+    <input name="name" placeholder="Nama Hewan" required>
+    <input name="species" placeholder="Jenis" required>
+    <input name="age" placeholder="Umur" type="number" required>
+    <button name="add">Tambah</button>
+</form>
+{% endblock %}

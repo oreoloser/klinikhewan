@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Tambah Hewan Peliharaan</h2>
+<form method="post">
+    <div class="mb-3">
+        <label for="name" class="form-label">Nama</label>
+        <input type="text" class="form-control" id="name" name="name" required>
+    </div>
+    <div class="mb-3">
+        <label for="species" class="form-label">Jenis</label>
+        <input type="text" class="form-control" id="species" name="species" required>
+    </div>
+    <div class="mb-3">
+        <label for="age" class="form-label">Umur</label>
+        <input type="number" class="form-control" id="age" name="age" required>
+    </div>
+    <div class="mb-3">
+        <label for="owner_name" class="form-label">Nama Pemilik</label>
+        <input type="text" class="form-control" id="owner_name" name="owner_name" required>
+    </div>
+    <div class="mb-3">
+        <label for="notes" class="form-label">Catatan</label>
+        <textarea class="form-control" id="notes" name="notes"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Tambah</button>
+</form>
+{% endblock %}
