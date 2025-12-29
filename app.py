@@ -4,8 +4,9 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your_secret_key_here'  # Ganti dengan secret key aman
+app.config['SECRET_KEY'] = 'your-very-secure-secret-key-change-this-in-production'  # Ganti dengan secret key yang aman
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
@@ -37,6 +38,7 @@ with app.app_context():
         admin = User(username='admin', password=generate_password_hash('adminpass'), role='admin')
         db.session.add(admin)
         db.session.commit()
+        print("Admin default dibuat: username=admin, password=adminpass")
 
 # Routes
 @app.route('/')
@@ -50,27 +52,28 @@ def data_hewan():
         if 'add' in request.form:
             name = request.form['name']
             species = request.form['species']
-            age = request.form['age']
+            age = int(request.form['age'])
             new_pet = Pet(name=name, species=species, age=age, owner_id=current_user.id)
             db.session.add(new_pet)
             db.session.commit()
-            flash('Hewan ditambahkan!')
+            flash('Hewan berhasil ditambahkan!', 'success')
         elif 'update' in request.form:
-            pet_id = request.form['pet_id']
+            pet_id = int(request.form['pet_id'])
             pet = Pet.query.get(pet_id)
             if pet and (pet.owner_id == current_user.id or current_user.role == 'admin'):
                 pet.name = request.form['name']
                 pet.species = request.form['species']
-                pet.age = request.form['age']
+                pet.age = int(request.form['age'])
                 db.session.commit()
-                flash('Hewan diperbarui!')
+                flash('Data hewan berhasil diperbarui!', 'success')
         elif 'delete' in request.form:
-            pet_id = request.form['pet_id']
+            pet_id = int(request.form['pet_id'])
             pet = Pet.query.get(pet_id)
             if pet and (pet.owner_id == current_user.id or current_user.role == 'admin'):
                 db.session.delete(pet)
                 db.session.commit()
-                flash('Hewan dihapus!')
+                flash('Hewan berhasil dihapus!', 'success')
+    
     if current_user.role == 'admin':
         pets = Pet.query.all()
     else:
@@ -81,7 +84,7 @@ def data_hewan():
 @login_required
 def data_user():
     if current_user.role != 'admin':
-        flash('Akses ditolak!')
+        flash('Akses ditolak! Hanya admin yang dapat mengakses halaman ini.', 'error')
         return redirect(url_for('home'))
     users = User.query.all()
     return render_template('data_user.html', users=users)
@@ -90,46 +93,89 @@ def data_user():
 @login_required
 def tambah_user():
     if current_user.role != 'admin':
-        flash('Akses ditolak!')
+        flash('Akses ditolak!', 'error')
         return redirect(url_for('home'))
+    
     if request.method == 'POST':
-        username = request.form['username']
-        password = generate_password_hash(request.form['password'])
+        username = request.form['username'].strip()
+        password = request.form['password']
         role = request.form['role']
-        new_user = User(username=username, password=password, role=role)
+
+        # Validasi username kosong atau sudah ada
+        if not username:
+            flash('Username wajib diisi!', 'error')
+            return render_template('tambah_user.html')
+        
+        if User.query.filter_by(username=username).first():
+            flash('Username sudah digunakan! Pilih username lain.', 'error')
+            return render_template('tambah_user.html')
+
+        # Validasi password: minimal 6 karakter & tidak kosong
+        if not password.strip():
+            flash('Password wajib diisi!', 'error')
+            return render_template('tambah_user.html')
+        
+        if len(password.strip()) < 6:
+            flash('Password harus minimal 6 karakter!', 'error')
+            return render_template('tambah_user.html')
+
+        # Jika lolos validasi, buat user baru
+        new_user = User(
+            username=username,
+            password=generate_password_hash(password),
+            role=role
+        )
         db.session.add(new_user)
         db.session.commit()
-        flash('User ditambahkan!')
+        flash('User baru berhasil ditambahkan!', 'success')
         return redirect(url_for('data_user'))
+    
     return render_template('tambah_user.html')
 
 @app.route('/update_user/<int:user_id>', methods=['GET', 'POST'])
 @login_required
 def update_user(user_id):
     if current_user.role != 'admin':
-        flash('Akses ditolak!')
+        flash('Akses ditolak!', 'error')
         return redirect(url_for('home'))
-    user = User.query.get(user_id)
+    user = User.query.get_or_404(user_id)
     if request.method == 'POST':
-        user.username = request.form['username']
-        if request.form['password']:
-            user.password = generate_password_hash(request.form['password'])
-        user.role = request.form['role']
+        username = request.form['username']
+        password = request.form['password']
+        role = request.form['role']
+
+        # Cek apakah username sudah dipakai oleh user lain
+        if User.query.filter(User.username == username, User.id != user_id).first():
+            flash('Username sudah digunakan oleh akun lain!', 'error')
+            return render_template('update_user.html', user=user)
+
+        user.username = username
+        user.role = role
+
+        if password.strip():  # Jika password diisi
+            user.password = generate_password_hash(password)
+            flash('User berhasil diperbarui, termasuk password baru!', 'success')
+        else:
+            flash('User berhasil diperbarui (password tidak diubah karena kosong).', 'success')
+
         db.session.commit()
-        flash('User diperbarui!')
         return redirect(url_for('data_user'))
+
     return render_template('update_user.html', user=user)
 
 @app.route('/delete_user/<int:user_id>')
 @login_required
 def delete_user(user_id):
     if current_user.role != 'admin':
-        flash('Akses ditolak!')
+        flash('Akses ditolak! Hanya admin yang dapat menghapus user.', 'error')
         return redirect(url_for('home'))
     user = User.query.get(user_id)
-    db.session.delete(user)
-    db.session.commit()
-    flash('User dihapus!')
+    if user and user.username != 'admin':  # Jangan hapus admin
+        db.session.delete(user)
+        db.session.commit()
+        flash('User berhasil dihapus!', 'success')
+    else:
+        flash('Gagal menghapus user!', 'error')
     return redirect(url_for('data_user'))
 
 @app.route('/fasilitas')
@@ -142,32 +188,50 @@ def alur_layanan():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         user = User.query.filter_by(username=username).first()
         if user and check_password_hash(user.password, password):
             login_user(user)
+            flash(f'Selamat datang, {user.username}!', 'success')
             return redirect(url_for('home'))
-        flash('Login gagal!')
+        flash('Username atau password salah!', 'error')
     return render_template('login.html')
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
     if request.method == 'POST':
         username = request.form['username']
-        password = generate_password_hash(request.form['password'])
-        new_user = User(username=username, password=password, role='user')  # Default user
+        password = request.form['password']
+        
+        # Validasi password minimal 6 karakter
+        if len(password) < 6:
+            flash('Password minimal 6 karakter!', 'error')
+            return render_template('signup.html')
+        
+        # Cek apakah username sudah ada
+        if User.query.filter_by(username=username).first():
+            flash('Username sudah digunakan! Silakan pilih username lain.', 'error')
+            return render_template('signup.html')
+        
+        new_user = User(username=username, password=generate_password_hash(password), role='user')
         db.session.add(new_user)
         db.session.commit()
-        flash('Akun dibuat! Silakan login.')
+        flash('Akun berhasil dibuat! Silakan login.', 'success')
         return redirect(url_for('login'))
+    
     return render_template('signup.html')
 
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
+    flash('Anda berhasil logout!', 'success')
     return redirect(url_for('home'))
 
 if __name__ == '__main__':
