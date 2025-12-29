@@ -1,12 +1,103 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>Alur Layanan</h2>
+<h2>Alur Layanan Klinik Hewan Sumbul</h2>
+
+<h3>Pasien Baru</h3>
 <ol>
-    <li>Registrasi di resepsionis atau online via sistem ini.</li>
-    <li>Konsultasi dengan dokter hewan.</li>
-    <li>Pemeriksaan (USG jika diperlukan).</li>
-    <li>Pengobatan atau perawatan.</li>
-    <li>Pembayaran dan follow-up.</li>
+    <li>Pasien baru didaftarkan di FO, Mendapatkan Kartu Pendaftaran;</li>
+    <li>Selanjutnya pasien ditimbang;</li>
+    <li>Dibawa ke Ruang Periksa;</li>
+    <li>Dilakukan pemeriksaan dan treatment oleh Dokter;</li>
+    <li>Setelah ditangani dokter, menunggu obat bila ada obat yang harus dibawa pulang;</li>
+    <li>Kemudian ke FO untuk menyelesaikan administrasi.</li>
 </ol>
-<p>Gunakan Data Hewan untuk melacak riwayat hewan Anda.</p>
+
+<h3>Pasien Lama</h3>
+<ol>
+    <li>Pasien lama didaftarkan di FO, Mendapatkan Kartu Pendaftaran;</li>
+    <li>Selanjutnya pasien ditimbang;</li>
+    <li>Dibawa ke Ruang Periksa;</li>
+    <li>Dilakukan pemeriksaan dan treatment oleh Dokter;</li>
+    <li>Setelah ditangani dokter, menunggu obat bila ada obat yang harus dibawa pulang;</li>
+    <li>Kemudian ke FO untuk menyelesaikan administrasi.</li>
+</ol>
+
+<h3>Pasien Grooming</h3>
+<ol>
+    <li>Pasien baru atau lama didaftarkan di FO, Menunjukkan Kartu Pendaftaran bagi pasien lama;</li>
+    <li>Selanjutnya pasien ditimbang;</li>
+    <li>Dibawa ke Ruang Periksa;</li>
+    <li>Dilakukan pemeriksaan oleh Dokter, apakah kondisi kesehatan hewan dapat digrooming atau tidak. Bila tidak memenuhi syarat kesehatan untuk grooming maka grooming ditunda, dan diberikan penanganan atau pengobatan sesuai kebutuhan kondisi hewan;</li>
+    <li>Setelah ditangani dokter, menunggu obat bila ada obat yang harus dibawa pulang;</li>
+    <li>Kemudian ke FO untuk menyelesaikan administrasi.</li>
+</ol>
+
+<h3>Pasien Gawat Darurat (UGD)</h3>
+<ol>
+    <li>Pasien Gawat Darurat langsung masuk ke Ruang Periksa untuk dilakukan tindakan cepat yang diperlukan;</li>
+    <li>Setelah mendapatkan pertolongan, klien bisa ke FO untuk mendaftar mengisi data-data yang diperlukan;</li>
+    <li>Selanjutnya pasien diperiksa secara rinci dan dilakukan treatment yang diperlukan oleh dokter;</li>
+    <li>Setelah ditangani dokter, selanjutnya menunggu obat bila ada obat yang harus dibawa pulang. Apabila perlu rawat inap, selanjutnya diproses untuk rawat inap;</li>
+    <li>Kemudian ke FO untuk menyelesaikan administrasi.</li>
+</ol>
+
+<h3>Pasien Bedah</h3>
+<ol>
+    <li>Pasien baru atau lama didaftarkan di FO, Menunjukkan Kartu Pendaftaran bagi pasien lama;</li>
+    <li>Selanjutnya pasien ditimbang;</li>
+    <li>Dibawa ke Ruang Periksa;</li>
+    <li>Dilakukan pemeriksaan dan treatment oleh Dokter. Bila diperlukan tindak lanjut pembedahan (operasi) disampaikan syarat-syarat dan juga berbagai kemungkinan kondisi bila dilakukan operasi;</li>
+    <li>Selanjutnya pasien diambil darahnya untuk memastikan kondisi kesehatan untuk dapat dilakukan operasi. Sebelum operasi pasien dipuasakan minimal 8 jam;</li>
+    <li>Klien/pemilik hewan mengisi persetujuan (inform concern) dan ditanda tangani;</li>
+    <li>Selanjutnya setelah dinyatakan layak untuk operasi, dilakukan penanganan pembedahan oleh dokter bedah;</li>
+    <li>Setelah operasi, pasien dirawat inap sesuai kebutuhan;</li>
+    <li>Setelah semua selesai dan memungkinkan dibawa, kemudian ke FO untuk menyelesaikan administrasi.</li>
+</ol>
+
+<h3>Rawat Inap Sakit</h3>
+<ol>
+    <li>Pasien baru atau lama didaftarkan di FO, Mendapatkan Kartu Pendaftaran bagi pasien baru;</li>
+    <li>Selanjutnya pasien ditimbang;</li>
+    <li>Dibawa ke Ruang Periksa;</li>
+    <li>Dilakukan pemeriksaan dan treatment oleh Dokter;</li>
+    <li>Setelah ditangani dokter, bila memerlukan perawatan intensif, maka pasien harus dirawat inap;</li>
+    <li>Selanjutnya klien ke FO untuk melakukan DP administrasi.</li>
+</ol>
+
+<h3>Rawat Inap Sehat</h3>
+<ol>
+    <li>Pasien baru atau lama didaftarkan di FO, Mendapatkan Kartu Pendaftaran bagi pasien baru;</li>
+    <li>Selanjutnya pasien ditimbang;</li>
+    <li>Dibawa ke Ruang Periksa dan dilakukan pemeriksaan oleh dokter untuk memastikan bahwa hewan dalam kondisi sehat, kemudian dibawa ke Ruang Rawat Inap;</li>
+    <li>Selanjutnya klien ke FO untuk melakukan DP administrasi.</li>
+</ol>
+
+<h3>Pasien Vaksinasi</h3>
+<ol>
+    <li>Pasien baru atau lama didaftarkan di FO, Mendapatkan Kartu Pendaftaran bagi pasien baru;</li>
+    <li>Selanjutnya pasien ditimbang;</li>
+    <li>Dibawa ke Ruang Periksa;</li>
+    <li>Dilakukan pemeriksaan oleh Dokter.</li>
+</ol>
+
+<h3>Pasien Periksa Kesehatan (General Check Up)</h3>
+<ol>
+    <li>Pasien baru atau lama didaftarkan di FO, Menunjukkan Kartu Pendaftaran bagi pasien lama;</li>
+    <li>Selanjutnya pasien ditimbang;</li>
+    <li>Dibawa ke Ruang Periksa;</li>
+    <li>Dilakukan pemeriksaan umum dan pengambilan darah untuk pemeriksaan darah rutin, dan uji fungsi hati dan ginjal oleh Dokter;</li>
+    <li>Setelah ditangani dokter, menunggu obat bila ada obat yang harus dibawa pulang;</li>
+    <li>Kemudian ke FO untuk menyelesaikan administrasi.</li>
+</ol>
+
+<h3>Konsultasi</h3>
+<ol>
+    <li>Klien bisa datang untuk konsultasi;</li>
+    <li>Mendaftar di FO;</li>
+    <li>Ketemu dengan dokter untuk konsultasi permasalahan kesehatan baik pakan maupun obat bebas atau vaksinasi;</li>
+    <li>Selanjutnya ke FO untuk menyelesaikan administrasi bila diperlukan.</li>
+</ol>
+
+<p><strong>Catatan:</strong> Gunakan menu <strong>Data Hewan</strong> di sistem ini untuk melihat dan mengelola riwayat hewan peliharaan Anda secara online.</p>
+
 {% endblock %}

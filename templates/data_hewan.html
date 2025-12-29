@@ -1,36 +1,314 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>Data Hewan</h2>
-<table>
-    <tr><th>ID</th><th>Nama</th><th>Jenis</th><th>Umur</th><th>Pemilik</th><th>Aksi</th></tr>
-    {% for pet in pets %}
-    <tr>
-        <td>{{ pet.id }}</td>
-        <td>{{ pet.name }}</td>
-        <td>{{ pet.species }}</td>
-        <td>{{ pet.age }}</td>
-        <td>{{ pet.owner.username }}</td>
-        <td>
-            <form method="POST" style="display:inline;">
-                <input type="hidden" name="pet_id" value="{{ pet.id }}">
-                <input name="name" value="{{ pet.name }}" required>
-                <input name="species" value="{{ pet.species }}" required>
-                <input name="age" value="{{ pet.age }}" required>
-                <button name="update">Update</button>
-            </form>
-            <form method="POST" style="display:inline;">
-                <input type="hidden" name="pet_id" value="{{ pet.id }}">
-                <button name="delete">Delete</button>
-            </form>
-        </td>
-    </tr>
-    {% endfor %}
-</table>
-<h3>Tambah Hewan</h3>
-<form method="POST">
-    <input name="name" placeholder="Nama Hewan" required>
-    <input name="species" placeholder="Jenis" required>
-    <input name="age" placeholder="Umur" type="number" required>
-    <button name="add">Tambah</button>
-</form>
+<div class="page-title">
+    <h2><i class="fas fa-paw"></i> Data Hewan Peliharaan</h2>
+    <p>Kelola data hewan peliharaan dengan mudah dan aman</p>
+</div>
+
+<div class="add-section">
+    <h3><i class="fas fa-plus-circle"></i> Tambah Hewan Baru</h3>
+    <form method="POST" class="add-form">
+        <input name="name" placeholder="Nama Hewan" required>
+        <input name="species" placeholder="Jenis/Ras (mis: Kucing Persia)" required>
+        <input name="age" type="number" placeholder="Umur (bulan)" min="0" required>
+        <button type="submit" name="add" class="btn-add">
+            <i class="fas fa-plus"></i> Tambah Hewan
+        </button>
+    </form>
+</div>
+
+<div class="pets-grid">
+    {% if pets %}
+        {% for pet in pets %}
+        <div class="pet-card">
+            <div class="pet-header">
+                <div class="pet-icon">
+                    <i class="fas fa-dog" style="font-size: 4em; color: rgba(255,255,255,0.8);"></i>
+                </div>
+                <div class="pet-name">{{ pet.name }}</div>
+            </div>
+            <div class="pet-body">
+                <div class="pet-details">
+                    <div class="detail-item">
+                        <i class="fas fa-cat"></i>
+                        <span><strong>Jenis:</strong> {{ pet.species }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-calendar"></i>
+                        <span><strong>Umur:</strong> {{ pet.age }} bulan</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-user"></i>
+                        <span><strong>Pemilik:</strong> {{ pet.owner.username }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="pet-footer">
+                <form method="POST">
+                    <input type="hidden" name="pet_id" value="{{ pet.id }}">
+                    <div class="edit-group">
+                        <input name="name" value="{{ pet.name }}" placeholder="Nama" required>
+                        <input name="species" value="{{ pet.species }}" placeholder="Jenis" required>
+                        <input name="age" value="{{ pet.age }}" type="number" placeholder="Umur" min="0" required>
+                    </div>
+                    <div class="action-group">
+                        <button type="submit" name="update" class="btn-update">
+                            <i class="fas fa-save"></i> Update
+                        </button>
+                        <button type="submit" name="delete" class="btn-delete" 
+                                onclick="return confirm('Yakin ingin menghapus {{ pet.name }}?')">
+                            <i class="fas fa-trash"></i> Hapus
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">
+                <i class="fas fa-heart" style="font-size: 5em; color: #ddd;"></i>
+            </div>
+            <h3>Belum ada data hewan</h3>
+            <p>Tambahkan hewan peliharaan pertama Anda sekarang!</p>
+            <a href="#add-section" class="btn-empty">+ Mulai Tambah Hewan</a>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+    .page-title { 
+        text-align: center; 
+        padding: 60px 20px; 
+        background: linear-gradient(135deg, rgba(106,13,173,0.05), rgba(171,71,188,0.05));
+    }
+    .page-title h2 { 
+        color: var(--primary); 
+        font-size: 2.8em; 
+        margin: 0; 
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .page-title p { 
+        color: var(--gray); 
+        font-size: 1.2em; 
+        margin: 10px 0 0;
+    }
+
+    .add-section { 
+        background: white; 
+        max-width: 1000px; 
+        margin: 0 auto 60px; 
+        padding: 40px; 
+        border-radius: 28px; 
+        box-shadow: 0 15px 50px rgba(106,13,173,0.18); 
+    }
+    .add-section h3 { 
+        color: var(--primary); 
+        margin: 0 0 30px; 
+        font-size: 1.8em; 
+        display: flex; 
+        align-items: center; 
+        gap: 10px;
+    }
+    .add-form { 
+        display: grid; 
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) auto; 
+        gap: 20px; 
+        align-items: end; 
+    }
+    .add-form input { 
+        padding: 18px; 
+        border: 2px solid var(--border); 
+        border-radius: 18px; 
+        font-size: 1.1em; 
+        background: #faf9ff;
+    }
+    .add-form input:focus { 
+        outline: none; 
+        border-color: var(--primary); 
+    }
+    .btn-add { 
+        background: linear-gradient(to right, var(--success), #20c997); 
+        color: white; 
+        border: none; 
+        padding: 18px 40px; 
+        border-radius: 18px; 
+        font-size: 1.2em; 
+        font-weight: bold; 
+        cursor: pointer; 
+        display: flex; 
+        align-items: center; 
+        gap: 10px;
+        transition: all 0.3s;
+    }
+    .btn-add:hover { 
+        transform: translateY(-3px); 
+        box-shadow: 0 8px 25px rgba(40,167,69,0.3);
+    }
+
+    .pets-grid { 
+        display: grid; 
+        grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); 
+        gap: 35px; 
+        max-width: 1400px; 
+        margin: 0 auto; 
+        padding: 0 20px; 
+    }
+    .pet-card { 
+        background: white; 
+        border-radius: 28px; 
+        overflow: hidden; 
+        box-shadow: 0 20px 50px rgba(106,13,173,0.18); 
+        transition: all 0.4s ease; 
+    }
+    .pet-card:hover { 
+        transform: translateY(-15px); 
+        box-shadow: 0 30px 60px rgba(106,13,173,0.25);
+    }
+    .pet-header { 
+        height: 180px; 
+        background: linear-gradient(135deg, var(--primary), var(--accent)); 
+        position: relative; 
+        display: flex; 
+        flex-direction: column; 
+        justify-content: center; 
+        align-items: center; 
+        color: white;
+    }
+    .pet-icon { 
+        margin-bottom: 10px; 
+    }
+    .pet-name { 
+        font-size: 1.8em; 
+        font-weight: bold; 
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    .pet-body { 
+        padding: 30px; 
+        background: var(--light);
+    }
+    .pet-details { 
+        display: flex; 
+        flex-direction: column; 
+        gap: 15px;
+    }
+    .detail-item { 
+        display: flex; 
+        align-items: center; 
+        gap: 12px; 
+        padding: 12px 16px; 
+        background: white; 
+        border-radius: 12px; 
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .detail-item i { 
+        color: var(--primary); 
+        font-size: 1.2em; 
+        width: 20px; 
+        text-align: center;
+    }
+    .detail-item span { 
+        font-size: 1.1em; 
+    }
+    .pet-footer { 
+        padding: 0 30px 40px; 
+    }
+    .edit-group { 
+        display: grid; 
+        grid-template-columns: 1fr 1fr 1fr; 
+        gap: 15px; 
+        margin-bottom: 25px; 
+    }
+    .edit-group input { 
+        width: 100%; 
+        padding: 15px; 
+        border: 2px solid var(--border); 
+        border-radius: 16px; 
+        background: #faf9ff;
+    }
+    .edit-group input:focus { 
+        outline: none; 
+        border-color: var(--primary); 
+    }
+    .action-group { 
+        display: flex; 
+        gap: 15px; 
+    }
+    .action-group button { 
+        flex: 1; 
+        padding: 16px; 
+        border: none; 
+        border-radius: 16px; 
+        font-size: 1.1em; 
+        font-weight: bold; 
+        cursor: pointer; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        gap: 10px; 
+        color: white; 
+        transition: all 0.3s;
+    }
+    .btn-update { 
+        background: linear-gradient(to right, var(--info), #138496); 
+    }
+    .btn-update:hover { 
+        transform: translateY(-3px); 
+        box-shadow: 0 8px 25px rgba(23,162,184,0.3);
+    }
+    .btn-delete { 
+        background: linear-gradient(to right, var(--error), #c82333); 
+    }
+    .btn-delete:hover { 
+        transform: translateY(-3px); 
+        box-shadow: 0 8px 25px rgba(220,53,69,0.3);
+    }
+
+    .empty-state { 
+        grid-column: 1 / -1; 
+        text-align: center; 
+        padding: 100px 20px; 
+        color: var(--gray); 
+        background: white; 
+        border-radius: 28px; 
+        box-shadow: 0 15px 50px rgba(106,13,173,0.18);
+    }
+    .empty-icon { 
+        margin-bottom: 30px; 
+    }
+    .empty-state h3 { 
+        font-size: 2em; 
+        margin: 20px 0; 
+        color: var(--primary);
+    }
+    .empty-state p { 
+        font-size: 1.2em; 
+        margin-bottom: 30px;
+    }
+    .btn-empty { 
+        background: linear-gradient(to right, var(--primary), var(--accent)); 
+        color: white; 
+        padding: 18px 40px; 
+        border-radius: 18px; 
+        text-decoration: none; 
+        font-weight: bold; 
+        font-size: 1.2em; 
+        display: inline-flex; 
+        align-items: center; 
+        gap: 10px;
+        transition: all 0.3s;
+    }
+    .btn-empty:hover { 
+        transform: translateY(-3px); 
+        box-shadow: 0 8px 25px rgba(106,13,173,0.3);
+    }
+
+    @media (max-width: 768px) {
+        .add-form, .edit-group { grid-template-columns: 1fr; }
+        .action-group { flex-direction: column; }
+        .pets-grid { grid-template-columns: 1fr; }
+        .detail-item { flex-direction: column; align-items: flex-start; gap: 8px; }
+        .page-title h2 { font-size: 2.2em; }
+    }
+</style>
 {% endblock %}

@@ -1,13 +1,188 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>Update User</h2>
-<form method="POST">
-    <input name="username" value="{{ user.username }}" required>
-    <input name="password" type="password" placeholder="Password Baru (opsional)">
-    <select name="role">
-        <option value="user" {% if user.role == 'user' %}selected{% endif %}>User</option>
-        <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Admin</option>
-    </select>
-    <button type="submit">Update</button>
-</form>
+
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <div class="auth-header">
+            <i class="fas fa-user-edit"></i>
+            <h2>Update User</h2>
+            <p>Edit informasi akun <strong>{{ user.username }}</strong> (ID: {{ user.id }})</p>
+        </div>
+
+        <div class="auth-form-container">
+            <form method="POST" class="auth-form">
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" name="username" value="{{ user.username }}" placeholder="Username" required autofocus>
+                </div>
+
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" name="password" placeholder="Password Baru (kosongkan jika tidak ingin ubah)">
+                    <small class="form-hint">Biarkan kosong jika tidak ingin mengganti password</small>
+                </div>
+
+                <div class="input-group">
+                    <i class="fas fa-user-tag"></i>
+                    <select name="role" required>
+                        <option value="user" {% if user.role == 'user' %}selected{% endif %}>User Biasa</option>
+                        <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Admin</option>
+                    </select>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-auth">Simpan Perubahan</button>
+                    <a href="{{ url_for('data_user') }}" class="btn-cancel">Batal</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .auth-wrapper {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background: linear-gradient(to bottom, #f4f0ff, #ffffff);
+    }
+
+    .auth-card {
+        background: white;
+        max-width: 520px;
+        width: 100%;
+        border-radius: 28px;
+        box-shadow: 0 25px 60px rgba(106,13,173,0.25);
+        overflow: hidden;
+    }
+
+    .auth-header {
+        background: linear-gradient(135deg, #6a0dad, #ab47bc);
+        color: white;
+        text-align: center;
+        padding: 50px 30px;
+    }
+
+    .auth-header i {
+        font-size: 4em;
+        margin-bottom: 20px;
+        opacity: 0.9;
+    }
+
+    .auth-header h2 {
+        margin: 0 0 12px;
+        font-size: 2.2em;
+    }
+
+    .auth-header p {
+        opacity: 0.95;
+        font-size: 1.1em;
+        margin: 0;
+    }
+
+    .auth-form-container {
+        padding: 50px 40px;
+    }
+
+    .auth-form {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+    }
+
+    .input-group {
+        position: relative;
+    }
+
+    .input-group i {
+        position: absolute;
+        left: 18px;
+        top: 18px;
+        color: #6a0dad;
+        font-size: 1.3em;
+        z-index: 2;
+    }
+
+    .input-group input,
+    .input-group select {
+        width: 100%;
+        padding: 18px 18px 18px 58px;
+        border: 2px solid #e8e0ff;
+        border-radius: 18px;
+        font-size: 1.1em;
+        transition: all 0.3s;
+        background: white;
+    }
+
+    .input-group input:focus,
+    .input-group select:focus {
+        outline: none;
+        border-color: #6a0dad;
+        box-shadow: 0 0 0 6px rgba(106,13,173,0.18);
+    }
+
+    .input-group select {
+        padding: 18px;
+        height: 62px;
+        cursor: pointer;
+    }
+
+    .form-hint {
+        display: block;
+        margin-top: 8px;
+        margin-left: 58px;
+        color: #666;
+        font-size: 0.95em;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .btn-auth {
+        flex: 1;
+        background: linear-gradient(to right, #6a0dad, #ab47bc);
+        color: white;
+        border: none;
+        padding: 18px;
+        border-radius: 18px;
+        font-size: 1.2em;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .btn-auth:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 25px rgba(106,13,173,0.3);
+    }
+
+    .btn-cancel {
+        flex: 1;
+        background: #f0f0f0;
+        color: #666;
+        text-align: center;
+        padding: 18px;
+        border-radius: 18px;
+        font-size: 1.2em;
+        font-weight: bold;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+    .btn-cancel:hover {
+        background: #e0e0e0;
+        transform: translateY(-4px);
+    }
+
+    @media (max-width: 480px) {
+        .auth-form-container { padding: 40px 30px; }
+        .form-actions { flex-direction: column; }
+    }
+</style>
+
 {% endblock %}
